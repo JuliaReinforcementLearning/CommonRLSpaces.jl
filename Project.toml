@@ -3,6 +3,12 @@ uuid = "408f5b3e-f2a2-48a6-b4bb-c8aa44c458e6"
 authors = ["Jun Tian <tianjun.cpp@gmail.com> and contributors"]
 version = "0.1.0"
 
+[deps]
+FillArrays = "1a297f60-69ca-5386-bcde-b61e274b549b"
+IntervalSets = "8197267c-284f-5f27-9208-e0e47529a953"
+Reexport = "189a3867-3050-52da-a836-e630ba90ab69"
+StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
+
 [compat]
 julia = "1.6"
 
