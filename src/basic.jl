@@ -1,4 +1,4 @@
-export Space, SpaceStyle, DiscreteSpaceStyle, ContinuousSpaceStyle
+export Space, SpaceStyle, DiscreteSpaceStyle, ContinuousSpaceStyle, TupleSpace, NamedSpace, DictSpace
 
 using Random
 
@@ -11,10 +11,6 @@ Space(s::Type{T}) where {T} = Space(typemin(T):typemax(T))
 Space(x, dims::Int...) = Space(fill(x, dims))
 Space(x::Type{T}, dims::Int...) where {T<:Integer} = Space(fill(typemin(x):typemax(T), dims))
 Space(x::Type{T}, dims::Int...) where {T<:AbstractFloat} = Space(fill(typemin(x) .. typemax(T), dims))
-
-const TupleSpace = Tuple{Vararg{<:Space}}
-const NamedSpace = NamedTuple{<:Any,<:TupleSpace}
-const DictSpace = Dict{<:Any,<:Space}
 
 Base.size(s::Space) = size(SpaceStyle(s))
 
@@ -72,3 +68,16 @@ function Random.rand(rng::AbstractRNG, s::Interval{:closed,:closed,T}) where {T}
         r * (s.right - s.left) + s.left
     end
 end
+
+#####
+
+const TupleSpace = Tuple{Vararg{<:Space}}
+const NamedSpace = NamedTuple{<:Any,<:TupleSpace}
+const DictSpace = Dict{<:Any,<:Space}
+
+Random.rand(rng::AbstractRNG, s::Union{TupleSpace,NamedSpace}) = map(x -> rand(rng, x), s)
+Random.rand(rng::AbstractRNG, s::DictSpace) = Dict(k => rand(rng, s[k]) for k in keys(s))
+
+Base.in(xs::Tuple, ts::TupleSpace) = length(xs) == length(ts) && all(((x, s),) -> x in s, zip(xs, ts))
+Base.in(xs::NamedTuple{names}, ns::NamedTuple{names,<:TupleSpace}) where {names} = all(((x, s),) -> x in s, zip(xs, ns))
+Base.in(xs::Dict, ds::DictSpace) = length(xs) == length(ds) && all(k -> haskey(ds, k) && xs[k] in ds[k], keys(xs))
