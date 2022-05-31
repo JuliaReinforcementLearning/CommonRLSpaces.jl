@@ -22,6 +22,8 @@
 ### API
 
 ```julia
+julia> using CommonRLSpaces
+
 julia> s = Space((:litchi, :longan, :mango))
 Space{Tuple{Symbol, Symbol, Symbol}}((:litchi, :longan, :mango))
 
@@ -36,8 +38,6 @@ julia> size(s)
 ```
 
 ```julia
-julia> using CommonRLSpaces
-
 julia> s = Space(UInt8, 2,3)
 Space{Matrix{UnitRange{UInt8}}}(UnitRange{UInt8}[0x00:0xff 0x00:0xff 0x00:0xff; 0x00:0xff 0x00:0xff 0x00:0xff])
 
