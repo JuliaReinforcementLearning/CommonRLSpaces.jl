@@ -6,7 +6,8 @@ struct Space{T}
     s::T
 end
 
-Space(s::Type{T}) where {T<:Number} = Space(typemin(T):typemax(T))
+Space(s::Type{T}) where {T<:Integer} = Space(typemin(T):typemax(T))
+Space(s::Type{T}) where {T<:AbstractFloat} = Space(typemin(T) .. typemax(T))
 
 Space(x, dims::Int...) = Space(Fill(x, dims))
 Space(x::Type{T}, dim::Int, extra_dims::Int...) where {T<:Integer} = Space(Fill(typemin(x):typemax(T), dim, extra_dims...))
