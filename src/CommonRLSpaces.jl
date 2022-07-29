@@ -12,7 +12,15 @@ export
     AbstractSpaceStyle,
     FiniteSpaceStyle,
     ContinuousSpaceStyle,
-    UnknownSpaceStyle
+    UnknownSpaceStyle,
+    bounds,
+    elsize
+
 include("basic.jl")
+
+export
+    Box
+
+include("array.jl")
 
 end

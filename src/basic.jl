@@ -23,6 +23,9 @@ end
 
 SpaceStyle(::AbstractInterval) = ContinuousSpaceStyle()
 
+function elsize end # note: different than Base.elsize
+
+function bounds end
 
 #=
 Base.size(::AbstractSpaceStyle{S}) where {S} = S
