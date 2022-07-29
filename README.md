@@ -62,7 +62,7 @@ Continuous spaces have two additional interface functions:
 |One dimensional continuous space| `ContinuousSpaceStyle{()}()` | `-1.2..3.3`, `Interval(1.0, 2.0)` |
 |Multi-dimensional discrete space| `FiniteSpaceStyle{(3,4)}()` | `ArraySpace((:cat, :dog), 3, 4)`, `ArraySpace(0:1, 3, 4)`, `ArraySpace(1:2, 3, 4)`, `ArraySpace(Bool, 3, 4)`|
 |Multi-dimensional variable discrete space| `FiniteSpaceStyle{(2,)}()` | `product((:cat, :dog), (:litchi, :longan, :mango))`, `product(-1:1, (false, true))`|
-|Multi-dimensional continuous space| `ContinuousSpaceStyle{(3,4)}()` | `Box([-1.0, -2.0], [2.0, 4.0])`, `product(-1.2..3.3, -4.6..5.0)`, `ArraySpace(-1.2..3.3, 3, 4)`, `ArraySpace(Float32, 3, 4)` |
+|Multi-dimensional continuous space| `ContinuousSpaceStyle{(2,)}()` or `ContinuousSpaceStyle{(3,4)}()` | `Box([-1.0, -2.0], [2.0, 4.0])`, `product(-1.2..3.3, -4.6..5.0)`, `ArraySpace(-1.2..3.3, 3, 4)`, `ArraySpace(Float32, 3, 4)` |
 |Multi-dimensional hybrid space| `HybridSpaceStyle{(2,),()}()` | `product(-1.2..3.3, -4.6..5.0, [:cat, :dog])`, `product(Box([-1.0, -2.0], [2.0, 4.0]), [1,2,3])`|
 
 ### API
