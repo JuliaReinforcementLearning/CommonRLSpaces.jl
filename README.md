@@ -34,10 +34,10 @@ Spaces with a finite number of elements have `FiniteSpaceStyle`. These spaces ar
 
 ### Continuous spaces
 
-Continuous spaces represent sets that have an uncountable number of elements they have a `SpaceStyle` of type `ContinuousSpaceStyle`. CommonRLSpaces does not adopt a rigorous mathematical definition of a continuous set, but, roughly, elements in the interior of a continuous space have other elements arbitrarily close to them.
+Continuous spaces represent sets that have an uncountable number of elements they have a `SpaceStyle` of type `ContinuousSpaceStyle`. CommonRLSpaces does not adopt a rigorous mathematical definition of a continuous set, but, roughly, elements in the interior of a continuous space have other elements very close to them.
 Continuous spaces have two additional interface functions:
 - `bounds(space)` returns upper and lower bounds in a tuple. For example, if `space` is a unit circle, `bounds(space)` will return `([-1.0, -1.0], [1.0, 1.0])`. This allows agents to choose policies that appropriately cover the space e.g. a normal distribution with a mean of `mean(bounds(space))` and a standard deviation of half the distance between the bounds.
-- [I have a few other ideas, but we can discuss later]
+- `clamp(x, space)` returns an element of `space` that is near `x`. i.e. if `space` is a unit circle, `clamp([2.0, 0.0], space)` might return `[1.0, 0.0]`. This allows for a convenient way for an agent to find a valid action if they sample actions from a distribution that doesn't match the space exactly (e.g. a normal distribution).
 
 ### Hybrid spaces
 

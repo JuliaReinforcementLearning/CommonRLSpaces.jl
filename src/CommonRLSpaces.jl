@@ -2,11 +2,17 @@ module CommonRLSpaces
 
 using Reexport
 
-@reexport using FillArrays
 @reexport using IntervalSets
-@reexport using StaticArrays
-@reexport import Base: OneTo
 
+using StaticArrays
+using FillArrays
+
+export
+    SpaceStyle,
+    AbstractSpaceStyle,
+    FiniteSpaceStyle,
+    ContinuousSpaceStyle,
+    UnknownSpaceStyle
 include("basic.jl")
 
 end
