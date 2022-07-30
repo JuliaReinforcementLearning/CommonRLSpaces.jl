@@ -8,3 +8,8 @@
     @test SpaceStyle(Set([1,2])) == FiniteSpaceStyle()
     @test SpaceStyle(1..2) == ContinuousSpaceStyle()
 end
+
+@testset "Bounds and clamp for IntervalSets" begin
+    @test bounds(1..2) == (1,2)
+    @test clamp(0.1, 1..2) == 1
+end
