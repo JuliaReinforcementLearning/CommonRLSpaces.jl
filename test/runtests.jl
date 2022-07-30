@@ -6,4 +6,5 @@ using StaticArrays
 @testset "CommonRLSpaces.jl" begin
     include("basic.jl")
     include("array.jl")
+    include("product.jl")
 end

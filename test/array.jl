@@ -53,6 +53,15 @@
         @test @inferred elsize(b) == (2,2)
     end
 
+    @testset "Box comparison" begin
+        @test Box([1,2], [3,4]) == Box([1,2], [3,4])
+        @test Box([1,2], [3,4]) != Box([1,3], [3,4])
+    end
+
+    @testset "Interval to box conversion" begin
+        @test convert(Box, 1..2) == Box([1], [2])
+    end
+
     @testset "ArraySpace with Range" begin
         s = ArraySpace(1:5, 3, 4)
         @test @inferred SpaceStyle(s) == FiniteSpaceStyle()

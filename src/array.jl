@@ -43,6 +43,7 @@ elsize(b::Box) = size(b.lower)
 bounds(b::Box) = (b.lower, b.upper)
 Base.clamp(x::AbstractArray, b::Box) = clamp.(x, b.lower, b.upper)
 
+Base.convert(t::Type{<:Box}, i::ClosedInterval) = t(SA[minimum(i)], SA[maximum(i)])
 
 struct RepeatedSpace{B, S<:Tuple} <: AbstractArraySpace
     base_space::B

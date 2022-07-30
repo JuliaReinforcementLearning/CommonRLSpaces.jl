@@ -24,4 +24,9 @@ export
 
 include("array.jl")
 
+export
+    product
+
+include("product.jl")
+
 end
