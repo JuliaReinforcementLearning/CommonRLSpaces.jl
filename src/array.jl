@@ -55,12 +55,14 @@ SpaceStyle(s::RepeatedSpace) = SpaceStyle(s.base_space)
 
 Base.rand(rng::AbstractRNG, sp::Random.SamplerTrivial{<:RepeatedSpace}) = rand(rng, sp[].base_space, sp[].elsize...)
 
-Base.in(x::AbstractArray, s::RepeatedSpace) = all(entry in s.base for entry in s)
+Base.in(x::AbstractArray, s::RepeatedSpace) = all(entry in s.base_space for entry in x)
 Base.eltype(s::RepeatedSpace) = AbstractArray{eltype(s.base_space), length(s.elsize)}
 Base.eltype(s::RepeatedSpace{<:AbstractInterval}) = AbstractArray{Random.gentype(s.base_space), length(s.elsize)}
-Base.elsize(s::RepeatedSpace) = s.elsize
+elsize(s::RepeatedSpace) = s.elsize
 
 function bounds(s::RepeatedSpace)
     bs = bounds(s.base_space)
     return (Fill(first(bs), s.elsize...), Fill(last(bs), s.elsize...))
 end
+
+Base.clamp(x::AbstractArray, s::RepeatedSpace) = map(entry -> clamp(entry, s.base_space), x)

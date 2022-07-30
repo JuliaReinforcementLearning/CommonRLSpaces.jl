@@ -19,7 +19,8 @@ export
 include("basic.jl")
 
 export
-    Box
+    Box,
+    ArraySpace
 
 include("array.jl")
 

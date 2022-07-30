@@ -13,7 +13,7 @@ SpaceStyle(space::Any) = UnknownSpaceStyle()
 SpaceStyle(::Tuple) = FiniteSpaceStyle()
 SpaceStyle(::NamedTuple) = FiniteSpaceStyle()
 
-function SpaceStyle(x::Union{AbstractArray,AbstractDict,AbstractSet})
+function SpaceStyle(x::Union{AbstractArray,AbstractDict,AbstractSet,AbstractRange})
     if Base.IteratorSize(x) isa Union{Base.HasLength, Base.HasShape} && length(x) < Inf
         return FiniteSpaceStyle()
     else
