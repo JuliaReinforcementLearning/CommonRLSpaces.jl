@@ -23,6 +23,10 @@ end
 
 SpaceStyle(::AbstractInterval) = ContinuousSpaceStyle()
 
+promote_spacestyle(::FiniteSpaceStyle, ::FiniteSpaceStyle) = FiniteSpaceStyle()
+promote_spacestyle(::ContinuousSpaceStyle, ::ContinuousSpaceStyle) = ContinuousSpaceStyle()
+promote_spacestyle(_, _) = UnknownSpaceStyle()
+
 function elsize end # note: different than Base.elsize
 
 function bounds end

@@ -41,11 +41,19 @@ Continuous spaces have two additional interface functions:
 
 ### Hybrid spaces
 
-[need to figure this out]
+The interface for hybrid continuous-discrete spaces is currently planned, but not yet defined. If the space style is not `FiniteSpaceStyle` or `ContinuousSpaceStyle`, it is `UnknownSpaceStyle`.
 
 ### Spaces of arrays
 
 [need to figure this out, but I think `elsize(space)` should return the size of the arrays in the space]
+
+### Cartesian products of spaces
+
+The Cartesian product of two spaces `a` and `b` can be constructed with `c = product(a, b)`.
+
+The exact form of the resulting space is an implementation detail. The only guarantees are (1) that there will be one unique element of `c` for every combination of one object from `a` and one object from `b` and (2) that the resulting collection conforms to the interface above.
+
+The `TupleProductSpace` constructor provides a specialized Cartesian product where each element is a tuple, i.e. `TupleProductSpace(a, b)` have type `Tuple{eltype(a), eltype(b)}`.
 
 ---
 

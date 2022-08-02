@@ -12,12 +12,11 @@ function product(b1::Box, b2::Box)
 end
 
 # handle case of 3 or more
-product(s1, s2, s3, args...) = product(product(s1, s2), s3, args...)
+product(s1, s2, s3, args...) = foldl(product, (s1, s2, s3, args...))
 
-struct GenericrSpaceProduct{T<:Tuple}
+struct TupleProductSpace{T<:Tuple}
     members::T
 end
 
 # handle any case not covered above
-product(s1, s2) = GenericrSpaceProduct((s1, s2))
-product(s1::GenericrSpaceProduct, s2) = GenericrSpaceProduct((s1.members..., s2))
+product(s1, s2) = TupleProductSpace((s1, s2))
