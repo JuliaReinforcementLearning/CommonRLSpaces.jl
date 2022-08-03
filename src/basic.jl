@@ -27,6 +27,9 @@ promote_spacestyle(::FiniteSpaceStyle, ::FiniteSpaceStyle) = FiniteSpaceStyle()
 promote_spacestyle(::ContinuousSpaceStyle, ::ContinuousSpaceStyle) = ContinuousSpaceStyle()
 promote_spacestyle(_, _) = UnknownSpaceStyle()
 
+# handle case of 3 or more
+promote_spacestyle(s1, s2, s3, others...) = foldl(promote_spacestyle, (s1, s2, s3, args...))
+
 function elsize end # note: different than Base.elsize
 
 function bounds end

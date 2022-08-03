@@ -51,9 +51,9 @@ The interface for hybrid continuous-discrete spaces is currently planned, but no
 
 The Cartesian product of two spaces `a` and `b` can be constructed with `c = product(a, b)`.
 
-The exact form of the resulting space is unspecified and should be considered an implementation detail. The only guarantees are (1) that there will be one unique element of `c` for every combination of one object from `a` and one object from `b` and (2) that the resulting collection conforms to the interface above.
+The exact form of the resulting space is unspecified and should be considered an implementation detail. The only guarantees are (1) that there will be one unique element of `c` for every combination of one object from `a` and one object from `b` and (2) that the resulting space conforms to the interface above.
 
-The `TupleProductSpace` constructor provides a specialized Cartesian product where each element is a tuple, i.e. `TupleProductSpace(a, b)` has elements of type `Tuple{eltype(a), eltype(b)}`.
+The `TupleSpaceProduct` constructor provides a specialized Cartesian product where each element is a tuple, i.e. `TupleSpaceProduct(a, b)` has elements of type `Tuple{eltype(a), eltype(b)}`.
 
 ---
 
