@@ -4,7 +4,7 @@ abstract type AbstractArraySpace end
 """
     Box(lower, upper)
 
-A Box represents a space of real-valued arrays bounded element-wise above by `upper` and below by `lower`, e.g. `Box([-1, -2], [3, 4]` represents the two-dimensional vector space that is the Cartesian product of the two closed sets: ``[-1, 3] \times [-2, 4]``.
+A Box represents a space of real-valued arrays bounded element-wise above by `upper` and below by `lower`, e.g. `Box([-1, -2], [3, 4]` represents the two-dimensional vector space that is the Cartesian product of the two closed sets: ``[-1, 3] \\times [-2, 4]``.
 
 The elements of a Box are always `AbstractArray`s with `AbstractFloat` elements. `Box`es always have `ContinuousSpaceStyle`, and products of `Box`es with `Box`es or `ClosedInterval`s are `Box`es when the dimensions are compatible.
 """
