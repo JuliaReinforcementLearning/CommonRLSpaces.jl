@@ -25,7 +25,8 @@ export
 include("array.jl")
 
 export
-    product
+    product,
+    TupleProduct
 
 include("product.jl")
 

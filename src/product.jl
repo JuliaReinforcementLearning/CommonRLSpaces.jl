@@ -14,27 +14,43 @@ end
 # handle case of 3 or more
 product(s1, s2, s3, args...) = foldl(product, (s1, s2, s3, args...)) # not totally sure if this should be foldl or foldr
 
-struct TupleSpaceProduct{T<:Tuple}
+struct TupleProduct{T<:Tuple}
     ss::T
 end
 
-TupleSpaceProduct(s1, s2, others...) = TupleSpaceProduct((s1, s2, others...))
+TupleProduct(s1, s2, others...) = TupleProduct((s1, s2, others...))
 
-subspaces(s::TupleSpaceProduct) = s.ss
+subspaces(s::TupleProduct) = s.ss
 
-product(s1::TupleSpaceProduct, s2::TupleSpaceProduct) = TupleSpaceProduct(subspaces(s1)..., subspaces(s2)...)
+product(s1::TupleProduct, s2::TupleProduct) = TupleProduct(subspaces(s1)..., subspaces(s2)...)
 
-# handle any case not covered elsewhere by making a TupleSpaceProduct
-# if one of the members is already a TupleSpaceProduct, we add put them together in a new "flat" TupleSpaceProduct
-# note: if we had defined product(s1::TupleSpaceProduct, s2) it might be annoying because product(s1, s2::AnotherSpace) would be ambiguous with it
+# handle any case not covered elsewhere by making a TupleProduct
+# if one of the members is already a TupleProduct, we add put them together in a new "flat" TupleProduct
+# note: if we had defined product(s1::TupleProduct, s2) it might be annoying because product(s1, s2::AnotherProduct) would be ambiguous with it
 function product(s1, s2)
-    if s1 isa TupleSpaceProduct
-        return TupleSpaceProduct(subspaces(s1)..., s2)
-    elseif s2 isa TupleSpaceProduct
-        return TupleSpaceProduct(s1, subspaces(s2)...)
+    if s1 isa TupleProduct
+        return TupleProduct(subspaces(s1)..., s2)
+    elseif s2 isa TupleProduct
+        return TupleProduct(s1, subspaces(s2)...)
     else
-        return TupleSpaceProduct(s1, s2)
+        return TupleProduct(s1, s2)
     end
 end
 
-SpaceStyle(s::TupleSpaceProduct) = promote_spacestyle(subspaces(s)...)
+SpaceStyle(s::TupleProduct) = promote_spacestyle(map(SpaceStyle, subspaces(s))...)
+
+Base.rand(rng::AbstractRNG, sp::Random.SamplerTrivial{<:TupleProduct}) = map(s->rand(rng, s), subspaces(sp[]))
+function Base.in(element, space::TupleProduct)
+    @assert length(element) == length(subspaces(space))
+    return all(element[i] in s for (i, s) in enumerate(subspaces(space)))
+end
+Base.eltype(space::TupleProduct) = Tuple{map(eltype, subspaces(space))...}
+
+Base.length(space::TupleProduct) = mapreduce(length, *, subspaces(space))
+Base.iterate(space, args...) = iterate(Iterators.product(subspaces(space)...), args...)
+
+function bounds(s::TupleProduct)
+    bds = map(bounds, subspaces(s))
+    return (first.(bds), last.(bds))
+end
+Base.clamp(x, s::TupleProduct) = map(clamp, x, subspaces(s))
