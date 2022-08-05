@@ -91,18 +91,19 @@ julia> length(s)
 ```
 
 ```julia
-julia> s = ArraySpace(UInt8, 2,3)
+julia> s = ArraySpace(1:5, 2,3)
+CommonRLSpaces.RepeatedSpace{UnitRange{Int64}, Tuple{Int64, Int64}}(1:5, (2, 3))
 
 julia> rand(s)
-2×3 Matrix{UInt8}:
- 0x7b  0x38  0xf3
- 0x6a  0xe1  0x28
+2×3 Matrix{Int64}:
+ 4  1  1
+ 3  2  2
 
 julia> rand(s) in s
 true
 
 julia> SpaceStyle(s)
-FiniteSpaceStyle{(2, 3)}()
+FiniteSpaceStyle()
 
 julia> elsize(s)
 (2, 3)
@@ -110,18 +111,27 @@ julia> elsize(s)
 
 ```julia
 julia> s = product(-1..1, 0..1)
+Box{StaticArraysCore.SVector{2, Float64}}([-1.0, 0.0], [1.0, 1.0])
 
 julia> rand(s)
-2-element SVector{2, Float64} with indices SOneTo(2):
- 0.5563101538643473
- 0.9227368869418011
+2-element StaticArraysCore.SVector{2, Float64} with indices SOneTo(2):
+ 0.03049072910834738
+ 0.6295234114874269
 
 julia> rand(s) in s
 true
 
 julia> SpaceStyle(s)
-ContinuousSpaceStyle{(2,)}()
+ContinuousSpaceStyle()
 
 julia> elsize(s)
 (2,)
+
+julia> bounds(s)
+([-1.0, 0.0], [1.0, 1.0])
+
+julia> clamp([5, 5], s)
+2-element StaticArraysCore.SizedVector{2, Float64, Vector{Float64}} with indices SOneTo(2):
+ 1.0
+ 1.0
 ```

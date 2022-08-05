@@ -57,6 +57,11 @@ struct RepeatedSpace{B, S<:Tuple} <: AbstractArraySpace
     elsize::S
 end
 
+"""
+    ArraySpace(base_space, size...)
+
+Create a space of Arrays with shape `size`, where each element of the array is drawn from `base_space`.
+"""
 ArraySpace(base_space, size...) = RepeatedSpace(base_space, size)
 
 SpaceStyle(s::RepeatedSpace) = SpaceStyle(s.base_space)

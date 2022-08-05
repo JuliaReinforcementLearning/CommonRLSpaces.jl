@@ -6,6 +6,8 @@ using Reexport
 
 using StaticArrays
 using FillArrays
+using Random
+import Base: clamp
 
 export
     SpaceStyle,

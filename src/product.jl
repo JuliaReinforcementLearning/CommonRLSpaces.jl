@@ -18,8 +18,16 @@ struct TupleProduct{T<:Tuple}
     ss::T
 end
 
+"""
+    TupleProduct(space1, space2, ...)
+
+Create a space representing the Cartesian product of the argument. Each element is a `Tuple` containing one element from each of the constituent spaces.
+
+Use `subspaces` to access a `Tuple` containing the constituent spaces.
+"""
 TupleProduct(s1, s2, others...) = TupleProduct((s1, s2, others...))
 
+"Return a `Tuple` containing the spaces used to create a `TupleProduct`"
 subspaces(s::TupleProduct) = s.ss
 
 product(s1::TupleProduct, s2::TupleProduct) = TupleProduct(subspaces(s1)..., subspaces(s2)...)
