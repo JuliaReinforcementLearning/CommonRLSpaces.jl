@@ -9,10 +9,11 @@
 
 A space is simply a set of objects. In a reinforcement learning context, spaces define the sets of possible states, actions, and observations.
 
-In Julia, spaces can be represented by a variety of objects. For instance, a small discrete action set might be represented with `["up", "left", "down", "right"]`, or an interval of real numbers might be represented with an object from the `IntervalSets` package. In general, the space defined by any Julia object is the set of objects `x` for which `x in space` returns `true`.
+In Julia, spaces can be represented by a variety of objects. For instance, a small discrete action set might be represented with `["up", "left", "down", "right"]`, or an interval of real numbers might be represented with an object from the [`IntervalSets`](https://github.com/JuliaMath/IntervalSets.jl) package. In general, the space defined by any Julia object is the set of objects `x` for which `x in space` returns `true`.
 
 In addition to establishing the definition above, this package provides three useful tools:
-1. Traits to communicate about the properties of spaces, e.g. whether they are continuous or discrete, how many dimensions they have, and how to interact with them.
+
+1. Traits to communicate about the properties of spaces, e.g. whether they are continuous or discrete, how many subspaces they have, and how to interact with them.
 2. Functions such as `product` for constructing more complex spaces
 3. Constructors to for spaces whose elements are arrays, such as `ArraySpace` and `Box`.
 
@@ -35,9 +36,12 @@ Spaces with a finite number of elements have `FiniteSpaceStyle`. These spaces ar
 ### Continuous spaces
 
 Continuous spaces represent sets that have an uncountable number of elements they have a `SpaceStyle` of type `ContinuousSpaceStyle`. CommonRLSpaces does not adopt a rigorous mathematical definition of a continuous set, but, roughly, elements in the interior of a continuous space have other elements very close to them.
-Continuous spaces have two additional interface functions:
+
+Continuous spaces have some additional interface functions:
+
 - `bounds(space)` returns upper and lower bounds in a tuple. For example, if `space` is a unit circle, `bounds(space)` will return `([-1.0, -1.0], [1.0, 1.0])`. This allows agents to choose policies that appropriately cover the space e.g. a normal distribution with a mean of `mean(bounds(space))` and a standard deviation of half the distance between the bounds.
 - `clamp(x, space)` returns an element of `space` that is near `x`. i.e. if `space` is a unit circle, `clamp([2.0, 0.0], space)` might return `[1.0, 0.0]`. This allows for a convenient way for an agent to find a valid action if they sample actions from a distribution that doesn't match the space exactly (e.g. a normal distribution).
+- `clamp!(x, space)`, similar to `clamp`, but clamps `x` in place.
 
 ### Hybrid spaces
 
