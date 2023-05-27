@@ -9,12 +9,12 @@ struct UnknownSpaceStyle <: AbstractSpaceStyle end
 
 Holy-style trait that describes whether the space is continuous, finite discrete, or an unknown type. See CommonRLInterface for a more detailed description of the styles.
 """
-SpaceStyle(space::Any) = UnknownSpaceStyle()
+SpaceStyle(::Any) = UnknownSpaceStyle()
 
 SpaceStyle(::Tuple) = FiniteSpaceStyle()
 SpaceStyle(::NamedTuple) = FiniteSpaceStyle()
 
-function SpaceStyle(x::Union{AbstractArray,AbstractDict,AbstractSet,AbstractRange})
+function SpaceStyle(x::Union{AbstractArray,AbstractDict,AbstractSet})
     if Base.IteratorSize(x) isa Union{Base.HasLength, Base.HasShape} && length(x) < Inf
         return FiniteSpaceStyle()
     else
