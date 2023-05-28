@@ -61,9 +61,11 @@
     @testset "Interval to box conversion" begin
         @test convert(Box, 1..2) == Box([1], [2])
     end
+end
 
-    @testset "ArraySpace with Range" begin
-        s = ArraySpace(1:5, 3, 4)
+@testset "RepeatedSpace" begin
+    @testset "RepeatedSpace with Range" begin
+        s = RepeatedSpace(1:5, 3, 4)
         @test @inferred SpaceStyle(s) == FiniteSpaceStyle()
         @test eltype(s) <: AbstractMatrix{eltype(1:5)}
         @test @inferred ones(Int, 3, 4) in s
@@ -74,8 +76,8 @@
         @test @inferred elsize(s) == (3,4)
     end
 
-    @testset "ArraySpace with IntervalSet" begin
-        s = ArraySpace(1..5, 3, 4)
+    @testset "RepeatedSpace with IntervalSet" begin
+        s = RepeatedSpace(1..5, 3, 4)
         @test @inferred SpaceStyle(s) == ContinuousSpaceStyle()
         @test eltype(s) <: AbstractMatrix{Float64}
         @test @inferred ones(Float64, 3, 4) in s

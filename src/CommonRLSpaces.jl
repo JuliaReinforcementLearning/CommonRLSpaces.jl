@@ -22,6 +22,7 @@ include("basic.jl")
 
 export
     Box,
+    RepeatedSpace,
     ArraySpace
 
 include("array.jl")

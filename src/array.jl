@@ -52,17 +52,18 @@ Base.clamp(x::AbstractArray, b::Box) = clamp.(x, b.lower, b.upper)
 
 Base.convert(t::Type{<:Box}, i::ClosedInterval) = t(SA[minimum(i)], SA[maximum(i)])
 
+"""
+    RepeatedSpace(base_space, elsize)
+
+A RepeatedSpace reperesents a space of arrays with shape `elsize`, where each element of 
+the array is drawn from `base_space`.
+"""
 struct RepeatedSpace{B, S<:Tuple} <: AbstractArraySpace
     base_space::B
     elsize::S
 end
 
-"""
-    ArraySpace(base_space, size...)
-
-Create a space of Arrays with shape `size`, where each element of the array is drawn from `base_space`.
-"""
-ArraySpace(base_space, size...) = RepeatedSpace(base_space, size)
+RepeatedSpace(base_size, elsize...) = RepeatedSpace(base_size, elsize)
 
 SpaceStyle(s::RepeatedSpace) = SpaceStyle(s.base_space)
 
@@ -79,3 +80,25 @@ function bounds(s::RepeatedSpace)
 end
 
 Base.clamp(x::AbstractArray, s::RepeatedSpace) = map(entry -> clamp(entry, s.base_space), x)
+
+"""
+    ArraySpace(base_space, size...)
+
+Constructor for RepeatedSpace and Box.
+
+If `base_space` is an AbstractFloat or ClosedInterval return a Box (preferred), otherwise 
+return a RepeatedSpace.
+"""
+ArraySpace(base_space, size...) = RepeatedSpace(base_space, size)
+
+function ArraySpace(::Type{T}, size...) where {T<:AbstractFloat}
+    lower = fill(typemin(T), size)
+    upper = fill(typemax(T), size)
+    return Box(lower, upper)
+end
+
+function ArraySpace(i::ClosedInterval, size...)
+    lower = fill(minimum(i), size)
+    upper = fill(maximum(T), size)
+    return Box(lower, upper)
+end
