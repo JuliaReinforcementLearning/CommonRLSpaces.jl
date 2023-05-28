@@ -1,12 +1,17 @@
 abstract type AbstractArraySpace end
-# Maybe AbstractArraySpace should have an eltype parameter so that you could call convert(AbstractArraySpace{Float32}, space)
+# Maybe AbstractArraySpace should have an eltype parameter so that you could call 
+# convert(AbstractArraySpace{Float32}, space)
 
 """
     Box(lower, upper)
 
-A Box represents a space of real-valued arrays bounded element-wise above by `upper` and below by `lower`, e.g. `Box([-1, -2], [3, 4]` represents the two-dimensional vector space that is the Cartesian product of the two closed sets: ``[-1, 3] \\times [-2, 4]``.
+A Box represents a space of real-valued arrays bounded element-wise above by `upper` and 
+below by `lower`, e.g. `Box([-1, -2], [3, 4]` represents the two-dimensional vector space 
+that is the Cartesian product of the two closed sets: ``[-1, 3] \\times [-2, 4]``.
 
-The elements of a Box are always `AbstractArray`s with `AbstractFloat` elements. `Box`es always have `ContinuousSpaceStyle`, and products of `Box`es with `Box`es or `ClosedInterval`s are `Box`es when the dimensions are compatible.
+The elements of a Box are always `AbstractArray`s with `AbstractFloat` elements. `Box`es 
+always have `ContinuousSpaceStyle`, and products of `Box`es with `Box`es or 
+`ClosedInterval`s are `Box`es when the dimensions are compatible.
 """
 struct Box{A<:AbstractArray{<:AbstractFloat}} <: AbstractArraySpace
     lower::A
@@ -67,11 +72,17 @@ RepeatedSpace(base_size, elsize...) = RepeatedSpace(base_size, elsize)
 
 SpaceStyle(s::RepeatedSpace) = SpaceStyle(s.base_space)
 
-Base.rand(rng::AbstractRNG, sp::Random.SamplerTrivial{<:RepeatedSpace}) = rand(rng, sp[].base_space, sp[].elsize...)
+function Base.rand(rng::AbstractRNG, sp::Random.SamplerTrivial{<:RepeatedSpace})
+    return rand(rng, sp[].base_space, sp[].elsize...)
+end
 
 Base.in(x::AbstractArray, s::RepeatedSpace) = all(entry in s.base_space for entry in x)
+
 Base.eltype(s::RepeatedSpace) = AbstractArray{eltype(s.base_space), length(s.elsize)}
-Base.eltype(s::RepeatedSpace{<:AbstractInterval}) = AbstractArray{Random.gentype(s.base_space), length(s.elsize)}
+function Base.eltype(s::RepeatedSpace{<:AbstractInterval})
+    return AbstractArray{Random.gentype(s.base_space), length(s.elsize)}
+end
+
 elsize(s::RepeatedSpace) = s.elsize
 
 function bounds(s::RepeatedSpace)
