@@ -15,6 +15,7 @@ export
     AbstractSpaceStyle,
     FiniteSpaceStyle,
     ContinuousSpaceStyle,
+    HybridSpaceStyle,
     UnknownSpaceStyle,
     bounds,
     elsize

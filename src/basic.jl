@@ -2,6 +2,7 @@ abstract type AbstractSpaceStyle end
 
 struct FiniteSpaceStyle <: AbstractSpaceStyle end
 struct ContinuousSpaceStyle <: AbstractSpaceStyle end
+struct HybridProductSpaceStyle <: AbstractSpaceStyle end
 struct UnknownSpaceStyle <: AbstractSpaceStyle end
 
 """
@@ -25,12 +26,14 @@ end
 
 SpaceStyle(::AbstractInterval) = ContinuousSpaceStyle()
 
-promote_spacestyle(::FiniteSpaceStyle, ::FiniteSpaceStyle) = FiniteSpaceStyle()
-promote_spacestyle(::ContinuousSpaceStyle, ::ContinuousSpaceStyle) = ContinuousSpaceStyle()
+const BASE_SPACE_STYLES = Union{FiniteSpaceStyle, ContinuousSpaceStyle, HybridProductSpaceStyle}
+function promote_spacestyle(::T1, ::T2) where {T1 <: BASE_SPACE_STYLES, T2 <: BASE_SPACE_STYLES}
+    return (T1 == T2) ? T1() : HybridProductSpaceStyle()
+end
 promote_spacestyle(_, _) = UnknownSpaceStyle()
 
 # handle case of 3 or more
-promote_spacestyle(s1, s2, s3, others...) = foldl(promote_spacestyle, (s1, s2, s3, args...))
+promote_spacestyle(s1, s2, s3, args...) = foldl(promote_spacestyle, (s1, s2, s3, args...))
 
 "Return the size of the objects in a space. This is guaranteed to be defined if the objects 
 in the space are arrays, but otherwise it may not be defined."
