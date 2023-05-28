@@ -22,16 +22,20 @@ end
 
 function Box(lower, upper; convert_to_static::Bool=false)
     @assert size(lower) == size(upper)
-    sz = size(lower)
-    continuous_lower = convert(AbstractArray{float(eltype(lower))}, lower)
-    continuous_upper = convert(AbstractArray{float(eltype(upper))}, upper)
+    T = promote_type(eltype(lower), eltype(upper)) |> float
+    continuous_lower = convert(AbstractArray{T}, lower)
+    continuous_upper = convert(AbstractArray{T}, upper)
     if convert_to_static
-        final_lower = SArray{Tuple{sz...}}(continuous_lower)
-        final_upper = SArray{Tuple{sz...}}(continuous_upper)
+        final_lower = SArray{Tuple{size(continuous_lower)...}}(continuous_lower)
+        final_upper = SArray{Tuple{size(continuous_upper)...}}(continuous_upper)
     else
-        final_lower, final_upper = promote(continuous_lower, continuous_upper)
+        final_lower, final_upper = continuous_lower, continuous_upper
     end 
     return Box{typeof(final_lower)}(final_lower, final_upper)
+end
+
+function Base.:(==)(b1::T, b2::T) where {T <: Box}
+    return (b1.lower == b2.lower) && (b1.upper == b2.upper)
 end
 
 # By default, convert builtin arrays to static

@@ -58,6 +58,26 @@
         @test Box([1,2], [3,4]) != Box([1,3], [3,4])
     end
 
+    @testset "Box type check" begin
+        T =  [
+            BigFloat, Float64, Float32, Float16,
+            BigInt, Int128, Int64, Int32, Int16, Int8,
+            UInt128, UInt64, UInt16, UInt32, UInt8
+        ]
+        for T1 in T, T2 in T
+            x, y = [1,2], [3,4]
+            box = Box(T1.(x), T2.(y))
+            T_goal = float(promote_type(T1, T2))
+            box_goal = Box{SVector{2, T_goal}}(
+                SVector{2,T_goal}(T_goal.(x)), 
+                SVector{2,T_goal}(T_goal.(y))
+            )
+            @testset "$T1, $T2" begin
+                @test box == box_goal
+            end 
+        end
+    end
+
     @testset "Interval to box conversion" begin
         @test convert(Box, 1..2) == Box([1], [2])
     end
