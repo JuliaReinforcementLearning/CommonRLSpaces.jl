@@ -7,6 +7,7 @@ using Reexport
 using StaticArrays
 using FillArrays
 using Random
+using Distributions
 import Base: clamp
 
 export

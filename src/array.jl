@@ -43,13 +43,61 @@ Box(lower::Array, upper::Array) = Box(lower, upper; convert_to_static=true)
 
 SpaceStyle(::Box) = ContinuousSpaceStyle()
 
-function Base.rand(rng::AbstractRNG, sp::Random.SamplerTrivial{<:Box})
+"""
+    Base.rand(::AbstractRNG, ::Random.SamplerTrivial{<:Box})
+
+Generate an array where each element is sampled from a dimension of a Box space.
+
+  * Finite intervals [a,b] are sampled from uniform distributions.
+  * Semi-infinite intervals (a,Inf) and (-Inf,b) are sampled from shifted exponential distributions.
+  * Infinite intervals (-Inf,Inf) are sampled from normal distributions.
+
+#Example
+```julia
+julia> using Random: seed!
+
+julia> using Distributions: Uniform, Normal, Exponential
+
+julia> box = Box([-10, -Inf, 3], [10, Inf, Inf])
+Box{StaticArraysCore.SVector{3, Float64}}([-10.0, -Inf, 3.0], [10.0, Inf, Inf])
+
+julia> seed!(0); rand(box)
+3-element StaticArraysCore.SVector{3, Float64} with indices SOneTo(3):
+ -1.8860105821594164
+  0.13392275765318448
+  3.837385552384043
+
+julia> seed!(0); [rand(Uniform(-10,10)), rand(Normal()), 3+rand(Exponential())]
+3-element Vector{Float64}:
+ -1.8860105821594164
+  0.13392275765318448
+  3.837385552384043
+```
+"""
+function Base.rand(rng::AbstractRNG, sp::Random.SamplerTrivial{Box{T}}) where {T}
     box = sp[]
-    return box.lower + rand_similar(rng, box.lower) .* (box.upper-box.lower)
+    x = [rand_interval(rng, lb, ub) for (lb, ub) in zip(box.lower, box.upper)]
+    return T(x)
 end
 
-rand_similar(rng::AbstractRNG, a::StaticArray) = rand(rng, typeof(a))
-rand_similar(rng::AbstractRNG, a::AbstractArray) = rand(rng, eltype(a), size(a)...)
+function rand_interval(rng::AbstractRNG, lb::T, ub::T) where {T <: Real}
+    offset, sign = zero(T), one(T)
+
+    if isfinite(lb) && isfinite(ub)
+        dist = Uniform(lb, ub)
+    elseif isfinite(lb) && !isfinite(ub)
+        offset = lb
+        dist = Exponential(one(T))
+    elseif !isfinite(lb) && isfinite(ub)
+        offset = ub
+        sign = -one(T)
+        dist = Exponential(one(T))
+    else
+        dist = Normal(zero(T), one(T))
+    end
+
+    return offset + sign * rand(rng, dist)
+end
 
 Base.in(x::AbstractArray, b::Box) = all(b.lower .<= x .<= b.upper)
 

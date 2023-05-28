@@ -78,6 +78,15 @@
         end
     end
 
+    @testset "Box random sample" begin
+        box = Box([-10, -Inf, 3, -Inf], [10, Inf, Inf, 6])
+        Random.seed!(0)
+        x = rand(box)
+        Random.seed!(0)
+        y = SA[rand(Uniform(-10, 10)), rand(Normal()), 3+rand(Exponential()), 6-rand(Exponential())]
+        @test x == y
+    end
+
     @testset "Interval to box conversion" begin
         @test convert(Box, 1..2) == Box([1], [2])
     end
