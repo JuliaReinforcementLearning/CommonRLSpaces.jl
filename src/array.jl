@@ -1,6 +1,19 @@
+"""
+    AbstractArraySpace
+
+Abstract base class for Array Spaces.
+"""
 abstract type AbstractArraySpace end
 # Maybe AbstractArraySpace should have an eltype parameter so that you could call 
 # convert(AbstractArraySpace{Float32}, space)
+
+"""
+    elsize(::AbstractArraySpace)
+
+Return the size of the objects in a space.
+"""
+function elsize end # note: different than Base.elsize
+
 
 """
     Box(lower, upper)
@@ -49,29 +62,21 @@ SpaceStyle(::Box) = ContinuousSpaceStyle()
 Generate an array where each element is sampled from a dimension of a Box space.
 
   * Finite intervals [a,b] are sampled from uniform distributions.
-  * Semi-infinite intervals (a,Inf) and (-Inf,b) are sampled from shifted exponential distributions.
+  * Semi-infinite intervals (a,Inf) and (-Inf,b) are sampled from shifted exponential 
+  distributions.
   * Infinite intervals (-Inf,Inf) are sampled from normal distributions.
 
-#Example
-```julia
-julia> using Random: seed!
+# Example
 
-julia> using Distributions: Uniform, Normal, Exponential
-
-julia> box = Box([-10, -Inf, 3], [10, Inf, Inf])
-Box{StaticArraysCore.SVector{3, Float64}}([-10.0, -Inf, 3.0], [10.0, Inf, Inf])
-
-julia> seed!(0); rand(box)
-3-element StaticArraysCore.SVector{3, Float64} with indices SOneTo(3):
- -1.8860105821594164
-  0.13392275765318448
-  3.837385552384043
-
-julia> seed!(0); [rand(Uniform(-10,10)), rand(Normal()), 3+rand(Exponential())]
-3-element Vector{Float64}:
- -1.8860105821594164
-  0.13392275765318448
-  3.837385552384043
+```@repl
+using CommonRLSpaces
+using Random: seed!
+using Distributions: Uniform, Normal, Exponential
+box = Box([-10, -Inf, 3], [10, Inf, Inf])
+seed!(0)
+rand(box)
+seed!(0)
+[rand(Uniform(-10,10)), rand(Normal()), 3+rand(Exponential())]
 ```
 """
 function Base.rand(rng::AbstractRNG, sp::Random.SamplerTrivial{Box{T}}) where {T}

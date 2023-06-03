@@ -1,4 +1,5 @@
 using CommonRLSpaces
+using Random
 using Documenter
 
 DocMeta.setdocmeta!(CommonRLSpaces, :DocTestSetup, :(using CommonRLSpaces); recursive=true)
@@ -6,19 +7,21 @@ DocMeta.setdocmeta!(CommonRLSpaces, :DocTestSetup, :(using CommonRLSpaces); recu
 makedocs(;
     modules=[CommonRLSpaces],
     authors="Jun Tian <tianjun.cpp@gmail.com> and contributors",
-    repo="https://github.com/Jun Tian/CommonRLSpaces.jl/blob/{commit}{path}#{line}",
+    repo="https://github.com/JuliaReinforcementLearning/CommonRLSpaces.jl/blob/{commit}{path}#{line}",
     sitename="CommonRLSpaces.jl",
     format=Documenter.HTML(;
         prettyurls=get(ENV, "CI", "false") == "true",
-        canonical="https://Jun Tian.github.io/CommonRLSpaces.jl",
+        canonical="https://github.com/JuliaReinforcementLearning/CommonRLSpaces.jl",
         assets=String[],
     ),
     pages=[
         "Home" => "index.md",
+        "array.md",
+        "extensions.md"
     ],
 )
 
 deploydocs(;
-    repo="github.com/Jun Tian/CommonRLSpaces.jl",
+    repo="https://github.com/JuliaReinforcementLearning/CommonRLSpaces.jl",
     devbranch="main",
 )

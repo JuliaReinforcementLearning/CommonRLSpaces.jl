@@ -1,15 +1,29 @@
+"""
+    AbstractSpaceStyle
+"""
 abstract type AbstractSpaceStyle end
-
+"""
+    FiniteSpaceStyle <: AbstractSpaceStyle
+"""
 struct FiniteSpaceStyle <: AbstractSpaceStyle end
+"""
+    ContinuousSpaceStyle <: AbstractSpaceStyle
+"""
 struct ContinuousSpaceStyle <: AbstractSpaceStyle end
+"""
+    HybridProductSpaceStyle <: AbstractSpaceStyle
+"""
 struct HybridProductSpaceStyle <: AbstractSpaceStyle end
+"""
+    UnknownSpaceStyle <: AbstractSpaceStyle
+"""
 struct UnknownSpaceStyle <: AbstractSpaceStyle end
 
 """
-    SpaceStyle(space)
+    SpaceStyle(::Any) :: AbstractSpaceStyle
 
-Holy-style trait that describes whether the space is continuous, finite discrete, or an 
-unknown type. See CommonRLInterface for a more detailed description of the styles.
+Holy-style trait that describes whether the space is continuous, finite discrete, hybrid 
+product, or an unknown type.
 """
 SpaceStyle(::Any) = UnknownSpaceStyle()
 
@@ -35,9 +49,6 @@ promote_spacestyle(_, _) = UnknownSpaceStyle()
 # handle case of 3 or more
 promote_spacestyle(s1, s2, s3, args...) = foldl(promote_spacestyle, (s1, s2, s3, args...))
 
-"Return the size of the objects in a space. This is guaranteed to be defined if the objects 
-in the space are arrays, but otherwise it may not be defined."
-function elsize end # note: different than Base.elsize
 
 """
     bounds(space)
