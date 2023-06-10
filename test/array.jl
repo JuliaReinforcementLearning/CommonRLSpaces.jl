@@ -58,12 +58,43 @@
         @test Box([1,2], [3,4]) != Box([1,3], [3,4])
     end
 
+    @testset "Box type check" begin
+        T =  [
+            BigFloat, Float64, Float32, Float16,
+            BigInt, Int128, Int64, Int32, Int16, Int8,
+            UInt128, UInt64, UInt16, UInt32, UInt8
+        ]
+        for T1 in T, T2 in T
+            x, y = [1,2], [3,4]
+            box = Box(T1.(x), T2.(y))
+            T_goal = float(promote_type(T1, T2))
+            box_goal = Box{SVector{2, T_goal}}(
+                SVector{2,T_goal}(T_goal.(x)), 
+                SVector{2,T_goal}(T_goal.(y))
+            )
+            @testset "$T1, $T2" begin
+                @test box == box_goal
+            end 
+        end
+    end
+
+    @testset "Box random sample" begin
+        box = Box([-10, -Inf, 3, -Inf], [10, Inf, Inf, 6])
+        Random.seed!(0)
+        x = rand(box)
+        Random.seed!(0)
+        y = SA[rand(Uniform(-10, 10)), rand(Normal()), 3+rand(Exponential()), 6-rand(Exponential())]
+        @test x == y
+    end
+
     @testset "Interval to box conversion" begin
         @test convert(Box, 1..2) == Box([1], [2])
     end
+end
 
-    @testset "ArraySpace with Range" begin
-        s = ArraySpace(1:5, 3, 4)
+@testset "RepeatedSpace" begin
+    @testset "RepeatedSpace with Range" begin
+        s = RepeatedSpace(1:5, 3, 4)
         @test @inferred SpaceStyle(s) == FiniteSpaceStyle()
         @test eltype(s) <: AbstractMatrix{eltype(1:5)}
         @test @inferred ones(Int, 3, 4) in s
@@ -74,8 +105,8 @@
         @test @inferred elsize(s) == (3,4)
     end
 
-    @testset "ArraySpace with IntervalSet" begin
-        s = ArraySpace(1..5, 3, 4)
+    @testset "RepeatedSpace with IntervalSet" begin
+        s = RepeatedSpace(1..5, 3, 4)
         @test @inferred SpaceStyle(s) == ContinuousSpaceStyle()
         @test eltype(s) <: AbstractMatrix{Float64}
         @test @inferred ones(Float64, 3, 4) in s
