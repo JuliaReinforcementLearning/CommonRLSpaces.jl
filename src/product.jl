@@ -55,7 +55,7 @@ end
 Base.eltype(space::TupleProduct) = Tuple{map(eltype, subspaces(space))...}
 
 Base.length(space::TupleProduct) = mapreduce(length, *, subspaces(space))
-Base.iterate(space, args...) = iterate(Iterators.product(subspaces(space)...), args...)
+Base.iterate(space::TupleProduct, args...) = iterate(Iterators.product(subspaces(space)...), args...)
 
 function bounds(s::TupleProduct)
     bds = map(bounds, subspaces(s))
