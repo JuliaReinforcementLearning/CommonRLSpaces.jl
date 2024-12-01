@@ -41,7 +41,7 @@ Continuous spaces have some additional interface functions:
 
 - `bounds(space)` returns upper and lower bounds in a tuple. For example, if `space` is a unit circle, `bounds(space)` will return `([-1.0, -1.0], [1.0, 1.0])`. This allows agents to choose policies that appropriately cover the space e.g. a normal distribution with a mean of `mean(bounds(space))` and a standard deviation of half the distance between the bounds.
 - `clamp(x, space)` returns an element of `space` that is near `x`. i.e. if `space` is a unit circle, `clamp([2.0, 0.0], space)` might return `[1.0, 0.0]`. This allows for a convenient way for an agent to find a valid action if they sample actions from a distribution that doesn't match the space exactly (e.g. a normal distribution).
-- `clamp!(x, space)`, similar to `clamp`, but clamps `x` in place.
+- [Not implemented] `clamp!(x, space)`, similar to `clamp`, but clamps `x` in place.
 
 ### Hybrid spaces
 
@@ -70,12 +70,12 @@ The `TupleSpaceProduct` constructor provides a specialized Cartesian product whe
 
 |Category|Style|Example|
 |:---|:----|:-----|
-|Enumerable discrete space| `FiniteSpaceStyle{()}()` | `(:cat, :dog)`, `0:1`, `["a","b","c"]` |
-|One dimensional continuous space| `ContinuousSpaceStyle{()}()` | `-1.2..3.3`, `Interval(1.0, 2.0)` |
-|Multi-dimensional discrete space| `FiniteSpaceStyle{(3,4)}()` | `ArraySpace((:cat, :dog), 3, 4)`, `ArraySpace(0:1, 3, 4)`, `ArraySpace(1:2, 3, 4)`, `ArraySpace(Bool, 3, 4)`|
-|Multi-dimensional variable discrete space| `FiniteSpaceStyle{(2,)}()` | `product((:cat, :dog), (:litchi, :longan, :mango))`, `product(-1:1, (false, true))`|
-|Multi-dimensional continuous space| `ContinuousSpaceStyle{(2,)}()` or `ContinuousSpaceStyle{(3,4)}()` | `Box([-1.0, -2.0], [2.0, 4.0])`, `product(-1.2..3.3, -4.6..5.0)`, `ArraySpace(-1.2..3.3, 3, 4)`, `ArraySpace(Float32, 3, 4)` |
-|Multi-dimensional hybrid space [planned for future]| `HybridSpaceStyle{(2,),()}()` | `product(-1.2..3.3, -4.6..5.0, [:cat, :dog])`, `product(Box([-1.0, -2.0], [2.0, 4.0]), [1,2,3])`|
+|Enumerable discrete space| `FiniteSpaceStyle()` | `(:cat, :dog)`, `0:1`, `["a","b","c"]` |
+|One dimensional continuous space| `ContinuousSpaceStyle()` | `-1.2..3.3`, `Interval(1.0, 2.0)` |
+|Multi-dimensional discrete space| `FiniteSpaceStyle()` | `ArraySpace((:cat, :dog), 3, 4)`, `ArraySpace(0:1, 3, 4)`, `ArraySpace(1:2, 3, 4)`, `ArraySpace(Bool, 3, 4)`|
+|Multi-dimensional variable discrete space| `FiniteSpaceStyle()` | `product((:cat, :dog), (:litchi, :longan, :mango))`, `product(-1:1, (false, true))`|
+|Multi-dimensional continuous space| `ContinuousSpaceStyle()` | `Box([-1.0, -2.0], [2.0, 4.0])`, `product(-1.2..3.3, -4.6..5.0)`, `ArraySpace(-1.2..3.3, 3, 4)`, `ArraySpace(Float32, 3, 4)` |
+|Multi-dimensional hybrid space [planned for future]| `HybridProductSpaceStyle()` | `product(-1.2..3.3, -4.6..5.0, [:cat, :dog])`, `product(Box([-1.0, -2.0], [2.0, 4.0]), [1,2,3])`|
 
 ### API
 

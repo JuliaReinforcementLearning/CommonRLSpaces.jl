@@ -4,6 +4,7 @@ authors = ["Jun Tian <tianjun.cpp@gmail.com> and contributors"]
 version = "0.2.1"
 
 [deps]
+Distributions = "31c24e10-a181-5473-b8eb-7969acd0382f"
 FillArrays = "1a297f60-69ca-5386-bcde-b61e274b549b"
 IntervalSets = "8197267c-284f-5f27-9208-e0e47529a953"
 Random = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
